@@ -12,20 +12,22 @@ pub fn input() {
     loop {
             //alr bet bir greeter ekleyelim ski lesgo
         println!("
-        ====================================
-        HOŞ GELDIN 1-5 ARASI BIR SAYI GIR...
-        ====================================
+        ======================================
+        THE CLI TOOL        1-5 ARASI SAYI GİR
+        ======================================
         1-Ping aracı
         2-Disk Bağlayıcı
-        3,4,5-under construction
+        3-Mini Shell(cd ve pipelar şuanlık çalışmıyor.)
+        4,5-under construction
         exit-çıkış
+        //clear(linux/mac/pwsh)/cls(windows-cmd)-temizle
         ");
         let Some(input) = crate::functions::oku("Seçimin?") else { break; };
         //umarım bu fonksiyonları bir gün yazabilirm :/
         match input.trim() {
             "1" => { temizle!(); crate::functions::ping_funcu(); }
             "2" => { temizle!(); crate::functions::disk_bağlayıcı(); }
-            "3" => {  }
+            "3" => { temizle!(); crate::functions::shell(); }
             "4" => {  }
             "5" => {  }
             _   => println!("Geçersiz giriş, tekrar dene"),

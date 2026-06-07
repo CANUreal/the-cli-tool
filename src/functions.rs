@@ -1,5 +1,7 @@
 use std::process::Command;
 use std::io;
+use std::io::Write;
+
 macro_rules! temizle {
     () => {
         let cmd = if cfg!(target_os = "windows") { "cls" } else { "clear" };
@@ -34,7 +36,7 @@ pub fn disk_bağlayıcı() {
             .expect("KOMUT YOK");
         //bura da bitti geçelim diğer işe...
 
-        let Some(disk) = oku("Hangi diski seçeceksin?") else { break; };
+        let Some(disk) = oku("Hangi diski seçeceksin? ( Başına /mnt yazmana gerek yok.)") else { break; };
         let disk_yolu = format!("/dev/{}", disk);
         if !std::path::Path::new(&disk_yolu).exists() {
             println!("Disk bulunamadı...\n");
@@ -54,6 +56,35 @@ pub fn disk_bağlayıcı() {
             Ok(s) if s.success() => { println!("Herşey Tamamlandı!"); break; }
             Ok(_) => println!("Bağlanamadı.Programı sudo ile çalıştır."),
             Err(e) => println!("Bağlanamadı.Hata: {}", e),
+        }
+    }
+}
+pub fn shell() {
+    loop {
+        print!("%");
+        io::stdout().flush().unwrap();
+
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).expect("Couldnt read vro ::/(");
+
+        let input = input.trim();
+
+        if input.is_empty(){
+            print!("HATA");
+            continue;
+        }
+
+        if input == "exit" {
+            break;
+        }
+
+        let mut parts = input.split_whitespace();
+        let command = parts.next().unwrap();
+        let args = parts;
+
+        match Command::new(command).args(args).status() {
+            Ok(_) => {},
+            Err(_) => eprintln!("Komut bulunamadı. {}", command)
         }
     }
 }
